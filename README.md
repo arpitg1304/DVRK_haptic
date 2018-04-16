@@ -9,4 +9,3 @@
 
 # Softwares used: CHAI 3D, ROS, OPENGL, GLFW library, C++, Python, Bullet physics engine
 
-Test

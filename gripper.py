@@ -43,6 +43,11 @@ def getch():
 
 from geometry_msgs.msg import PoseStamped
 
+def update_from_sub(data):
+    global msg
+    msg = data
+
+
 def pose():
 
     msg_grip = JointState()
@@ -55,6 +60,7 @@ def pose():
     pub2 = rospy.Publisher('/dvrk/MTML/position_cartesian_current', PoseStamped, queue_size=1)
     rospy.init_node('poser', anonymous=True)
 
+    global msg
     msg = PoseStamped()
     rate = rospy.Rate(10)
 
@@ -70,6 +76,10 @@ def pose():
     msg.pose.orientation.z = 0.70
     msg.pose.orientation.w = 0
 
+    global msg_data
+    msg_data = msg.pose
+    position_sub = rospy.Subscriber('/dvrk/MTML/position_cartesian_current', PoseStamped, update_from_sub)
+
     msg_cam = Joy()
 
     while not rospy.is_shutdown():
@@ -80,6 +90,17 @@ def pose():
         hello_str = "This"
         pub.publish(hello_str)
 
+        # cam_sub = rospy.Subscriber('/dvrk/footpedals/')
+
+        # msg.pose.position.x = msg_data.position.x
+        # msg.pose.position.y = msg_data.position.y
+        # msg.pose.position.z = msg_data.position.z
+        #
+        # msg.pose.orientation.x = msg_data.orientation.x
+        # msg.pose.orientation.y = msg_data.orientation.y
+        # msg.pose.orientation.z = msg_data.orientation.z
+        # msg.pose.orientation.w = msg_data.orientation.w
+
         msg.pose.position.x = msg.pose.position.x
         msg.pose.position.y = msg.pose.position.y
         msg.pose.position.z = msg.pose.position.z
@@ -88,6 +109,9 @@ def pose():
         msg.pose.orientation.y = msg.pose.orientation.y
         msg.pose.orientation.z = msg.pose.orientation.z
         msg.pose.orientation.w = msg.pose.orientation.w
+
+
+        rospy.loginfo(msg)
 
         char = getch()
 
@@ -219,6 +243,9 @@ def pose():
             msg.pose.orientation.w = q_new[3]
             pub2.publish(msg)
             rate.sleep()
+
+        # msg_data = msg.pose
+
 
 def talker():
     pub = rospy.Publisher('/dvrk/MTML/status', String, queue_size=1)

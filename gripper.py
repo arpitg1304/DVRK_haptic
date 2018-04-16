@@ -3,6 +3,7 @@ import math
 import tf
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import JointState
+from sensor_msgs.msg import Joy
 import std_msgs.msg
 from std_msgs.msg import Float64
 from std_msgs.msg import String
@@ -69,8 +70,11 @@ def pose():
     msg.pose.orientation.z = 0.70
     msg.pose.orientation.w = 0
 
+    msg_cam = Joy()
+
     while not rospy.is_shutdown():
 
+        pub_cam = rospy.Publisher('/dvrk/footpedals/coag', Joy, queue_size=1)
 
         pub = rospy.Publisher('/dvrk/MTML/status', String, queue_size=1)
         hello_str = "This"
@@ -86,6 +90,14 @@ def pose():
         msg.pose.orientation.w = msg.pose.orientation.w
 
         char = getch()
+
+        if (char == "c"):
+            msg_cam.buttons = [1]
+            pub_cam.publish(msg_cam)
+
+        if (char == "v"):
+            msg_cam.buttons = [0]
+            pub_cam.publish(msg_cam)
 
         if (char == "n"):
             msg_grip.position[0] = msg_grip.position[0] + 0.1
@@ -123,7 +135,7 @@ def pose():
             print("Right pressed")
             
 
-        elif char == "r":
+        elif char == "f":
             msg.pose.position.z = msg.pose.position.z + 0.01
             pub2.publish(msg)
 
@@ -131,7 +143,7 @@ def pose():
             print("Right pressed")
             
 
-        elif char == "f":
+        elif char == "r":
             msg.pose.position.z = msg.pose.position.z - 0.01
             pub2.publish(msg)
 

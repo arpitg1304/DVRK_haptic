@@ -10,6 +10,9 @@
 # Softwares used: CHAI 3D, ROS, OPENGL, GLFW library, C++, Python, Bullet physics engine
 
 
-# Tasks created in the virtual environment:
+# Video of the final project outcome:
+
+https://drive.google.com/file/d/1iJPo5IJ9SIlRUtpJT9XodrJa3CMjBGIU/view
+
 
 
